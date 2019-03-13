@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuthenticationDemo.DataAccess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -48,7 +49,26 @@ namespace AuthenticationDemo.CustomAuthentication
 
         public override string[] GetRolesForUser(string username)
         {
-            throw new NotImplementedException();
+            var userRoles = new string[] { };
+
+            if (!HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                return null;
+            }
+
+            using (AuthenticationDB context = new AuthenticationDB())
+            {
+                var selectedUser = (from u in context.Users.Include("Roles")
+                                    where string.Compare(u.Username, username) == 0
+                                    select u).FirstOrDefault();
+
+                if (selectedUser == null)
+                    return null;
+
+                userRoles = new[] { selectedUser.Roles.Select(a => a.RoleName).ToString() };
+
+                return userRoles.ToArray();
+            }
         }
 
         public override string[] GetUsersInRole(string roleName)
@@ -58,7 +78,8 @@ namespace AuthenticationDemo.CustomAuthentication
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            throw new NotImplementedException();
+            var userRole = this.GetRolesForUser(username);
+            return userRole.Contains(roleName);
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)

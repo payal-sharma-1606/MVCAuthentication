@@ -135,6 +135,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="CustomAuthentication\CustomMembership.cs" />
     <Compile Include="CustomAuthentication\CustomMemberShipUser.cs" />
+    <Compile Include="CustomAuthentication\CustomPrincipal.cs" />
     <Compile Include="CustomAuthentication\CustomRole.cs" />
     <Compile Include="DataAccess\AuthenticationDB.cs" />
     <Compile Include="DataAccess\Role.cs" />
