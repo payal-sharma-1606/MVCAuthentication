@@ -1,0 +1,13 @@
+﻿@model AuthenticationDemo.Models.LoginView
+
+@{
+    ViewBag.Title = "Login Page";
+}
+
+@using (Html.BeginForm(null, null, new { ViewBag.ReturnURL }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    
+
+
+}

@@ -25,13 +25,12 @@ namespace AuthenticationDemo.Controllers
         [HttpGet]
         public ActionResult Login(string ReturnURL = "")
         {
-            //if (User.Identity.IsAuthenticated)
-            //    return LogOut();
+            if (User.Identity.IsAuthenticated)
+                return LogOut();
 
             ViewBag.ReturnURL = ReturnURL;
             return View();
         }
-
 
         [HttpPost]
         public ActionResult Login(LoginView loginView, string ReturnURL = "")
@@ -119,11 +118,10 @@ namespace AuthenticationDemo.Controllers
             {
                 messageRegistration = "Some thing wrong.";
             }
-            
+
             ModelState.AddModelError("", "Somethingwrong: username or password invalid....");
             return View(registerationView);
         }
-
 
         [NonAction]
         private void VerificationEmail(string email, string activationCode)
@@ -156,6 +154,15 @@ namespace AuthenticationDemo.Controllers
 
             })
                 smtp.Send(message);
+        }
+
+        public ActionResult LogOut()
+        {
+            HttpCookie cookie = new HttpCookie("Cookie1", "");
+            cookie.Expires = DateTime.Now.AddDays(-1);
+
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login", "Account", null);
         }
     }
 }
